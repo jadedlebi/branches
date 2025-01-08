@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NCRC - Service Area Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        #search {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        #search:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        #searchButton {
+            padding: 12px 24px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        #searchButton:hover {
+            background: #1e3c72;
+        }
+
+        #result {
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        #map {
+            height: 600px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 1px solid #333;
+        }
+
+        .blue { background-color: blue; }
+        .red { background-color: red; }
+        .purple { background-color: purple; }
+
+        /* Popup styling */
+        .leaflet-popup-content {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        .leaflet-popup-content strong {
+            color: #1e3c72;
+        }
+
+        .leaflet-popup-content em {
+            color: #666;
+            font-style: italic;
+        }
+
+        .search-hint {
+            color: #666;
+            font-size: 0.9em;
+            margin-left: 12px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Service Area Map</h1>
+            <p>Search for branches by address</p>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="search" placeholder="Enter an address...">
+                <button id="searchButton">Search</button>
+            </div>
+            <small class="search-hint">US addresses only</small>
+            <div id="result"></div>
+        </div>
+
+        <div id="map"></div>
+
+        <div class="legend">
+            <h3>Branch Status</h3>
+            <div class="legend-item">
+                <div class="legend-color blue"></div>
+                <span>Existing Branch (present in both 2016 and 2024)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color red"></div>
+                <span>Closed Branch (present in 2016, not in 2024)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color purple"></div>
+                <span>New Branch (opened since 2016)</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let countyData = [];
+        let branchData = [];
+        let markers = [];
+
+        var map = L.map('map').setView([39.8283, -98.5795], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        async function loadCountyData() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/jadedlebi/branches/refs/heads/main/BranchPresence.csv');
+                const csvText = await response.text();
+                const results = Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true
+                });
+                countyData = results.data;
+            } catch (error) {
+                document.getElementById('result').innerHTML = 'Error loading county data. Please try again.';
+                document.getElementById('result').style.color = 'red';
+            }
+        }
+
+        fetch('https://raw.githubusercontent.com/jadedlebi/branches/refs/heads/main/sod1624.csv')
+            .then(response => response.text())
+            .then(data => {
+                branchData = Papa.parse(data, { header: true }).data;
+            });
+
+        function clearMarkers() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+        }
+
+        async function searchAddress() {
+            clearMarkers();
+            
+            const address = document.getElementById('search').value;
+            const resultDiv = document.getElementById('result');
+
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&countrycodes=us`);
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+
+                    L.marker([lat, lon]).addTo(map);
+                    map.setView([lat, lon], 13);
+
+                    const reverseGeocodeResponse = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                    const locationData = await reverseGeocodeResponse.json();
+                    
+                    let county = locationData.address.county;
+                    if (!county) {
+                        if (locationData.address.state === 'District of Columbia' || 
+                            locationData.address.state === 'Washington, D.C.' || 
+                            locationData.address.state === 'DC') {
+                            county = 'District of Columbia';
+                        } else {
+                            resultDiv.textContent = 'Could not determine county for this address. Please try again.';
+                            resultDiv.style.color = 'red';
+                            return;
+                        }
+                    }
+                    
+                    county = county.replace(/ County$/i, '')
+                                 .replace(/^County /i, '')
+                                 .toUpperCase()
+                                 .trim();
+                    
+                    const matchingCounty = countyData.find(row => {
+                        const csvCounty = row.county.replace(/ County$/i, '')
+                                                  .replace(/^County /i, '')
+                                                  .toUpperCase()
+                                                  .trim();
+                        const csvState = row.state.toUpperCase().trim();
+                        const searchState = locationData.address.state.toUpperCase().trim();
+                        
+                        return csvCounty === county && csvState === searchState;
+                    });
+
+                    if (matchingCounty) {
+                        const city = locationData.address.city || locationData.address.town || locationData.address.village || 'Unknown City';
+                        let message = `${city}, ${matchingCounty.county}, ${matchingCounty.state}:<br>`;
+                        
+                        const had_FNFG = matchingCounty.fn16 === 'X';
+                        const had_KEY = matchingCounty.kb16 === 'X';
+                        const has_KEY_now = matchingCounty.kb24 === 'X';
+
+                        message += '2016: ';
+                        if (had_FNFG || had_KEY) {
+                            if (had_FNFG && had_KEY) {
+                                message += 'Both First Niagara and KeyBank present<br>';
+                            } else if (had_FNFG) {
+                                message += 'First Niagara present<br>';
+                            } else {
+                                message += 'KeyBank present<br>';
+                            }
+                        } else {
+                            message += 'No presence<br>';
+                        }
+
+                        message += '2024: ' + (has_KEY_now ? 'KeyBank present' : 'No KeyBank presence');
+                        
+                        resultDiv.style.color = has_KEY_now ? '#2a5298' : '#666';
+                        resultDiv.innerHTML = message;
+                        
+                        const filteredBranches = branchData.filter(branch => 
+                            branch.STCNTYBR === matchingCounty.geoid5
+                        );
+
+                        if (filteredBranches.length === 0) {
+                            resultDiv.innerHTML += '<br><br><em>No branch locations found in this county.</em>';
+                        } else {
+                            const groupedBranches = filteredBranches.reduce((acc, branch) => {
+                                const year = branch.YEAR && (branch.YEAR.includes("2016") || branch.YEAR.includes("16")) ? "2016" : 
+                                        (branch.YEAR && (branch.YEAR.includes("2024") || branch.YEAR.includes("24")) ? "2024" : null);
+                                
+                                if (!acc[branch.UNINUMBR]) {
+                                    acc[branch.UNINUMBR] = {
+                                        UNINUMBR: branch.UNINUMBR,
+                                        branch2016: year === "2016" ? branch : undefined,
+                                        branch2024: year === "2024" ? branch : undefined
+                                    };
+                                } else {
+                                    if (year === "2016") {
+                                        acc[branch.UNINUMBR].branch2016 = branch;
+                                    } else if (year === "2024") {
+                                        acc[branch.UNINUMBR].branch2024 = branch;
+                                    }
+                                }
+                                return acc;
+                            }, {});
+
+                            Object.values(groupedBranches).forEach(branchGroup => {
+                                let markerColor;
+                                let markerDescription;
+                                
+                                if (branchGroup.branch2016 && !branchGroup.branch2024) {
+                                    markerColor = 'red';
+                                    markerDescription = 'Closed branch (present in 2016, not in 2024)';
+                                } else if (!branchGroup.branch2016 && branchGroup.branch2024) {
+                                    markerColor = 'purple';
+                                    markerDescription = 'New branch (not present in 2016, opened by 2024)';
+                                } else {
+                                    markerColor = 'blue';
+                                    markerDescription = 'Existing branch (present in both 2016 and 2024)';
+                                }
+                                
+                                const branchData = branchGroup.branch2024 || branchGroup.branch2016;
+                                
+                                if (branchData && branchData.SIMS_LATITUDE && branchData.SIMS_LONGITUDE) {
+                                    const marker = L.circleMarker([branchData.SIMS_LATITUDE, branchData.SIMS_LONGITUDE], {
+                                        radius: 8,
+                                        fillColor: markerColor,
+                                        color: '#000',
+                                        weight: 1,
+                                        opacity: 1,
+                                        fillOpacity: 0.8
+                                    });
+
+                                    marker.bindPopup(`
+                                        <strong>${branchData.NAMEFULL || 'Unknown Bank'}</strong><br>
+                                        <strong>${branchData.NAMEBR || 'Unknown Branch'}</strong><br>
+                                        ${branchData.ADDRESBR || ''}<br>
+                                        ${branchData.CITYBR || ''}, ${branchData.STALPBR || ''} ${branchData.ZIPBR || ''}<br>
+                                        <em>${markerDescription}</em>
+                                    `);
+
+                                    marker.addTo(map);
+                                    markers.push(marker);
+                                }
+                            });
+
+                            if (markers.length > 0) {
+                                const group = new L.featureGroup(markers);
+                                map.fitBounds(group.getBounds().pad(0.1));
+                            }
+                        }
+                    } else {
+                        const city = locationData.address.city || locationData.address.town || locationData.address.village || 'Unknown City';
+                        let message = `Sorry, ${city}, ${county}, ${locationData.address.state} is not in our database.`;
+                        resultDiv.style.color = '#666';
+                        resultDiv.textContent = message;
+                    }
+                } else {
+                    resultDiv.textContent = 'Address not found. Please try again.';
+                    resultDiv.style.color = 'red';
+                }
+            } catch (error) {
+                resultDiv.textContent = 'An error occurred while searching. Please try again.';
+                resultDiv.style.color = 'red';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadCountyData);
+        document.getElementById('searchButton').addEventListener('click', searchAddress);
+        document.getElementById('search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchAddress();
+            }
+        });
+    </script>
+</body>
+</html>
