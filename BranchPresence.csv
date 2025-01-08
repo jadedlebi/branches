@@ -1,0 +1,244 @@
+﻿cbsa_code,cbsa,geoid5,state,county,fn16,kb16,kb24
+99999,Rural Alaska,02016,Alaska,Aleutians West Census Area,,X,X
+27940,"Juneau, AK",02110,Alaska,Juneau City and Borough,,X,X
+99999,Rural Alaska,02122,Alaska,Kenai Peninsula Borough,,X,X
+28540,"Ketchikan, AK",02130,Alaska,Ketchikan Gateway Borough,,X,X
+99999,Rural Alaska,02150,Alaska,Kodiak Island Borough,,X,X
+49340,"Worcester, MA-CT",09150,Connecticut,Windham County,,,X
+13940,"Blackfoot, ID",16011,Idaho,Bingham County,,X,X
+15420,"Burley, ID",16031,Idaho,Cassia County,,X,X
+39940,"Rexburg, ID",16065,Idaho,Madison County,,X,X
+36620,"Ontario, OR-ID",16075,Idaho,Payette County,,X,X
+27220,"Jackson, WY-ID",16081,Idaho,Teton County,,X,X
+46300,"Twin Falls, ID",16083,Idaho,Twin Falls County,,X,
+47700,"Warsaw, IN",18085,Indiana,Kosciusko County,,X,X
+38500,"Plymouth, IN",18099,Indiana,Marshall County,,X,X
+99999,Rural Indiana,18149,Indiana,Starke County,,X,X
+11420,"Angola, IN",18151,Indiana,Steuben County,,X,X
+99999,Rural Maine,23003,Maine,Aroostook County,,X,X
+99999,Rural Maine,23009,Maine,Hancock County,,X,X
+12300,"Augusta-Waterville, ME",23011,Maine,Kennebec County,,X,X
+99999,Rural Maine,23013,Maine,Knox County,,X,X
+99999,Rural Maine,23017,Maine,Oxford County,,X,X
+99999,Rural Maine,23027,Maine,Waldo County,,X,X
+10300,"Adrian, MI",26091,Michigan,Lenawee County,,X,X
+36460,"Olean, NY",36009,New York,Cattaraugus County,,X,X
+12180,"Auburn, NY",36011,New York,Cayuga County,X,X,X
+27460,"Jamestown-Dunkirk-Fredonia, NY",36013,New York,Chautauqua County,X,X,X
+38460,"Plattsburgh, NY",36019,New York,Clinton County,,X,X
+26460,"Hudson, NY",36021,New York,Columbia County,X,X,X
+18660,"Cortland, NY",36023,New York,Cortland County,X,X,X
+31660,"Malone, NY",36033,New York,Franklin County,X,X,X
+24100,"Gloversville, NY",36035,New York,Fulton County,X,X,X
+12860,"Batavia, NY",36037,New York,Genesee County,X,X,X
+99999,Rural New York,36039,New York,Greene County,X,X,X
+99999,Rural New York,36049,New York,Lewis County,,X,X
+11220,"Amsterdam, NY",36057,New York,Montgomery County,X,X,X
+36580,"Oneonta, NY",36077,New York,Otsego County,,X,X
+36300,"Ogdensburg-Massena, NY",36089,New York,St. Lawrence County,X,X,X
+99999,Rural New York,36105,New York,Sullivan County,X,X,X
+99999,Rural New York,36121,New York,Wyoming County,X,,X
+11780,"Ashtabula, OH",39007,Ohio,Ashtabula County,,X,
+41400,"Salem, OH",39029,Ohio,Columbiana County,,X,X
+19580,"Defiance, OH",39039,Ohio,Defiance County,,X,X
+41780,"Sandusky, OH",39043,Ohio,Erie County,,X,
+22300,"Findlay, OH",39063,Ohio,Hancock County,,X,X
+35940,"Norwalk, OH",39077,Ohio,Huron County,,X,X
+45780,"Toledo, OH",39123,Ohio,Ottawa County,,X,
+23380,"Fremont, OH",39143,Ohio,Sandusky County,,X,X
+26220,"Hood River, OR",41027,Oregon,Hood River County,,X,X
+47620,"Warren, PA",42123,Pennsylvania,Warren County,X,,X
+36260,"Ogden-Clearfield, UT",49003,Utah,Box Elder County,,,X
+25720,"Heber, UT",49043,Utah,Summit County,,X,X
+99999,Rural Vermont,50001,Vermont,Addison County,,X,X
+40860,"Rutland, VT",50021,Vermont,Rutland County,,X,X
+99999,Rural Vermont,50025,Vermont,Windham County,,X,X
+38820,"Port Angeles, WA",53009,Washington,Clallam County,,X,X
+34180,"Moses Lake, WA",53025,Washington,Grant County,,X,X
+10140,"Aberdeen, WA",53027,Washington,Grays Harbor County,,X,X
+36020,"Oak Harbor, WA",53029,Washington,Island County,,X,X
+16500,"Centralia, WA",53041,Washington,Lewis County,,X,X
+99999,Rural Washington,53043,Washington,Lincoln County,,X,X
+43220,"Shelton, WA",53045,Washington,Mason County,,X,X
+99999,Rural Washington,53049,Washington,Pacific County,,X,X
+99999,Rural Washington,53055,Washington,San Juan County,,X,X
+44540,"Sterling, CO",08075,Colorado,Logan County,,X,
+39940,"Rexburg, ID",16043,Idaho,Fremont County,,X,
+38540,"Pocatello, ID",16077,Idaho,Power County,,X,
+99999,Rural Indiana,18131,Indiana,Pulaski County,,X,
+99999,Rural Maine,23007,Maine,Franklin County,,X,
+99999,Rural Maine,23015,Maine,Lincoln County,,X,
+99999,Rural Maine,23021,Maine,Piscataquis County,,X,
+99999,Rural Maine,23025,Maine,Somerset County,,X,
+44780,"Sturgis, MI",26149,Michigan,St. Joseph County,,X,
+39220,"Price, UT",49007,Utah,Carbon County,,X,
+12740,"Barre, VT",50023,Vermont,Washington County,,X,
+32740,"Meadville, PA",42039,Pennsylvania,Crawford County,X,,
+10420,"Akron, OH",39133,Ohio,Portage County,,X,X
+10420,"Akron, OH",39153,Ohio,Summit County,,X,X
+10540,"Albany-Lebanon, OR",41043,Oregon,Linn County,,X,X
+10580,"Albany-Schenectady-Troy, NY",36001,New York,Albany County,X,X,X
+10580,"Albany-Schenectady-Troy, NY",36083,New York,Rensselaer County,X,X,X
+10580,"Albany-Schenectady-Troy, NY",36091,New York,Saratoga County,X,X,X
+10580,"Albany-Schenectady-Troy, NY",36093,New York,Schenectady County,X,X,X
+10580,"Albany-Schenectady-Troy, NY",36095,New York,Schoharie County,,X,X
+10900,"Allentown-Bethlehem-Easton, PA-NJ",42025,Pennsylvania,Carbon County,X,,X
+10900,"Allentown-Bethlehem-Easton, PA-NJ",42077,Pennsylvania,Lehigh County,X,,X
+10900,"Allentown-Bethlehem-Easton, PA-NJ",42095,Pennsylvania,Northampton County,X,,X
+11260,"Anchorage, AK",02020,Alaska,Anchorage Municipality,,X,X
+11260,"Anchorage, AK",02170,Alaska,Matanuska-Susitna Borough,,X,X
+11460,"Ann Arbor, MI",26161,Michigan,Washtenaw County,,X,X
+12620,"Bangor, ME",23019,Maine,Penobscot County,,X,X
+13380,"Bellingham, WA",53073,Washington,Whatcom County,,X,X
+13780,"Binghamton, NY",36007,New York,Broome County,X,,X
+13780,"Binghamton, NY",36107,New York,Tioga County,X,,
+14260,"Boise City, ID",16001,Idaho,Ada County,,X,X
+14260,"Boise City, ID",16027,Idaho,Canyon County,,X,X
+14260,"Boise City, ID",16045,Idaho,Gem County,,X,X
+14500,"Boulder, CO",08013,Colorado,Boulder County,,X,X
+14740,"Bremerton-Silverdale-Port Orchard, WA",53035,Washington,Kitsap County,,X,X
+49340,"Worcester, MA-CT",09120,Connecticut,Windham County,,,X
+49340,"Worcester, MA-CT",09190,Connecticut,Windham County,,,X
+14860,"Bridgeport-Stamford-Norwalk, CT",09001,Connecticut,Fairfield County,X,,
+15380,"Buffalo-Cheektowaga, NY",36029,New York,Erie County,X,X,X
+15380,"Buffalo-Cheektowaga, NY",36063,New York,Niagara County,X,X,X
+15540,"Burlington-South Burlington, VT",50007,Vermont,Chittenden County,,X,X
+15540,"Burlington-South Burlington, VT",50011,Vermont,Franklin County,,X,X
+15940,"Canton-Massillon, OH",39151,Ohio,Stark County,,X,X
+15940,"Canton-Massillon, OH",39019,Ohio,Carroll County,,X,
+15980,"Cape Coral-Fort Myers, FL",12071,Florida,Lee County,,X,X
+17140,"Cincinnati, OH-KY-IN",39017,Ohio,Butler County,,X,X
+17140,"Cincinnati, OH-KY-IN",39025,Ohio,Clermont County,,X,X
+17140,"Cincinnati, OH-KY-IN",39061,Ohio,Hamilton County,,X,X
+17140,"Cincinnati, OH-KY-IN",39165,Ohio,Warren County,,X,X
+11780,"Ashtabula, OH",39007,Ohio,Ashtabula County,,,X
+17460,"Cleveland-Elyria, OH",39035,Ohio,Cuyahoga County,,,X
+17460,"Cleveland-Elyria, OH",39055,Ohio,Geauga County,,,X
+17460,"Cleveland-Elyria, OH",39085,Ohio,Lake County,,,X
+17460,"Cleveland-Elyria, OH",39093,Ohio,Lorain County,,,X
+17460,"Cleveland-Elyria, OH",39103,Ohio,Medina County,,,X
+17460,"Cleveland-Elyria, OH",39035,Ohio,Cuyahoga County,,X,
+17460,"Cleveland-Elyria, OH",39055,Ohio,Geauga County,,X,
+17460,"Cleveland-Elyria, OH",39085,Ohio,Lake County,,X,
+17460,"Cleveland-Elyria, OH",39093,Ohio,Lorain County,,X,
+17460,"Cleveland-Elyria, OH",39103,Ohio,Medina County,,X,
+17820,"Colorado Springs, CO",08041,Colorado,El Paso County,,X,X
+18140,"Columbus, OH",39041,Ohio,Delaware County,,X,X
+18140,"Columbus, OH",39045,Ohio,Fairfield County,,X,X
+18140,"Columbus, OH",39049,Ohio,Franklin County,,X,X
+18700,"Corvallis, OR",41003,Oregon,Benton County,,X,X
+19430,"Dayton-Kettering, OH",39057,Ohio,Greene County,,X,
+19430,"Dayton-Kettering, OH",39113,Ohio,Montgomery County,,X,
+19430,"Dayton-Kettering, OH",39057,Ohio,Greene County,,,X
+19430,"Dayton-Kettering, OH",39113,Ohio,Montgomery County,,,X
+19740,"Denver-Aurora-Lakewood, CO",08001,Colorado,Adams County,,X,X
+19740,"Denver-Aurora-Lakewood, CO",08005,Colorado,Arapahoe County,,X,X
+19740,"Denver-Aurora-Lakewood, CO",08014,Colorado,Broomfield County,,X,X
+19740,"Denver-Aurora-Lakewood, CO",08031,Colorado,Denver County,,X,X
+19740,"Denver-Aurora-Lakewood, CO",08035,Colorado,Douglas County,,X,X
+19740,"Denver-Aurora-Lakewood, CO",08059,Colorado,Jefferson County,,X,X
+19820,"Detroit-Warren-Dearborn, MI",26093,Michigan,Livingston County,,X,X
+19820,"Detroit-Warren-Dearborn, MI",26125,Michigan,Oakland County,,X,X
+19820,"Detroit-Warren-Dearborn, MI",26163,Michigan,Wayne County,,X,X
+20700,"East Stroudsburg, PA",42089,Pennsylvania,Monroe County,X,,
+21140,"Elkhart-Goshen, IN",18039,Indiana,Elkhart County,,X,X
+21500,"Erie, PA",42049,Pennsylvania,Erie County,X,,X
+21660,"Eugene-Springfield, OR",41039,Oregon,Lane County,,X,X
+21820,"Fairbanks, AK",02090,Alaska,Fairbanks North Star Borough,,X,X
+22660,"Fort Collins, CO",08069,Colorado,Larimer County,,X,X
+24020,"Glens Falls, NY",36113,New York,Warren County,X,X,X
+24420,"Grants Pass, OR",41033,Oregon,Josephine County,,X,X
+49340,"Worcester, MA-CT",09110,Connecticut,Windham County,,,X
+49340,"Worcester, MA-CT",09130,Connecticut,Windham County,,,X
+25540,"Hartford-East Hartford-Middletown, CT",09003,Connecticut,Hartford County,X,,
+25540,"Hartford-East Hartford-Middletown, CT",09007,Connecticut,Middlesex County,X,,
+25540,"Hartford-East Hartford-Middletown, CT",09013,Connecticut,Tolland County,X,,
+26820,"Idaho Falls, ID",16019,Idaho,Bonneville County,,X,X
+26900,"Indianapolis-Carmel-Anderson, IN",18011,Indiana,Boone County,,X,X
+26900,"Indianapolis-Carmel-Anderson, IN",18057,Indiana,Hamilton County,,X,X
+26900,"Indianapolis-Carmel-Anderson, IN",18063,Indiana,Hendricks County,,X,X
+26900,"Indianapolis-Carmel-Anderson, IN",18081,Indiana,Johnson County,,X,X
+26900,"Indianapolis-Carmel-Anderson, IN",18095,Indiana,Madison County,,X,X
+26900,"Indianapolis-Carmel-Anderson, IN",18097,Indiana,Marion County,,X,X
+26900,"Indianapolis-Carmel-Anderson, IN",18109,Indiana,Morgan County,,X,X
+26900,"Indianapolis-Carmel-Anderson, IN",18145,Indiana,Shelby County,,X,X
+27060,"Ithaca, NY",36109,New York,Tompkins County,X,,X
+28420,"Kennewick-Richland, WA",53005,Washington,Benton County,,X,X
+28740,"Kingston, NY",36111,New York,Ulster County,X,X,X
+39100,"Poughkeepsie-Newburgh-Middletown, NY",36027,New York,Dutchess County,,,X
+39100,"Poughkeepsie-Newburgh-Middletown, NY",36071,New York,Orange County,,,X
+29020,"Kokomo, IN",18067,Indiana,Howard County,,X,X
+30340,"Lewiston-Auburn, ME",23001,Maine,Androscoggin County,,X,X
+30860,"Logan, UT-ID",49005,Utah,Cache County,,X,X
+31020,"Longview, WA",53015,Washington,Cowlitz County,,X,X
+31900,"Mansfield, OH",39139,Ohio,Richland County,,X,X
+32780,"Medford, OR",41029,Oregon,Jackson County,,X,X
+33100,"Miami-Fort Lauderdale-Pompano Beach, FL",12099,Florida,Palm Beach County,,X,X
+33780,"Monroe, MI",26115,Michigan,Monroe County,,X,X
+34580,"Mount Vernon-Anacortes, WA",53057,Washington,Skagit County,,X,X
+34940,"Naples-Marco Island, FL",12021,Florida,Collier County,,X,X
+49340,"Worcester, MA-CT",09170,Connecticut,Windham County,,,X
+35300,"New Haven-Milford, CT",09009,Connecticut,New Haven County,X,,
+39100,"Poughkeepsie-Newburgh-Middletown, NY",36027,New York,Dutchess County,X,X,
+35620,"New York-Newark-Jersey City, NY-NJ-PA",36061,New York,New York County,,X,X
+39100,"Poughkeepsie-Newburgh-Middletown, NY",36071,New York,Orange County,X,X,
+35620,"New York-Newark-Jersey City, NY-NJ-PA",36079,New York,Putnam County,X,X,X
+35620,"New York-Newark-Jersey City, NY-NJ-PA",36087,New York,Rockland County,X,X,X
+35620,"New York-Newark-Jersey City, NY-NJ-PA",36119,New York,Westchester County,X,X,X
+36260,"Ogden-Clearfield, UT",49003,Utah,Box Elder County,,X,
+36260,"Ogden-Clearfield, UT",49011,Utah,Davis County,,X,X
+36260,"Ogden-Clearfield, UT",49057,Utah,Weber County,,X,X
+36500,"Olympia-Lacey-Tumwater, WA",53067,Washington,Thurston County,,X,X
+37980,"Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",42017,Pennsylvania,Bucks County,X,,X
+37980,"Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",42029,Pennsylvania,Chester County,X,,X
+37980,"Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",42091,Pennsylvania,Montgomery County,X,,X
+37980,"Philadelphia-Camden-Wilmington, PA-NJ-DE-MD",42101,Pennsylvania,Philadelphia County,X,,X
+38300,"Pittsburgh, PA",42003,Pennsylvania,Allegheny County,X,,X
+38300,"Pittsburgh, PA",42019,Pennsylvania,Butler County,X,,X
+38300,"Pittsburgh, PA",42051,Pennsylvania,Fayette County,X,,X
+38300,"Pittsburgh, PA",42125,Pennsylvania,Washington County,X,,X
+38300,"Pittsburgh, PA",42129,Pennsylvania,Westmoreland County,X,,X
+38540,"Pocatello, ID",16005,Idaho,Bannock County,,X,X
+38860,"Portland-South Portland, ME",23005,Maine,Cumberland County,,X,X
+38860,"Portland-South Portland, ME",23031,Maine,York County,,X,X
+38860,"Portland-South Portland, ME",23023,Maine,Sagadahoc County,,X,
+38900,"Portland-Vancouver-Hillsboro, OR-WA",41005,Oregon,Clackamas County,,X,X
+38900,"Portland-Vancouver-Hillsboro, OR-WA",41051,Oregon,Multnomah County,,X,X
+38900,"Portland-Vancouver-Hillsboro, OR-WA",41067,Oregon,Washington County,,X,X
+38900,"Portland-Vancouver-Hillsboro, OR-WA",41071,Oregon,Yamhill County,,X,X
+38900,"Portland-Vancouver-Hillsboro, OR-WA",53011,Washington,Clark County,,X,X
+39340,"Provo-Orem, UT",49049,Utah,Utah County,,X,X
+39740,"Reading, PA",42011,Pennsylvania,Berks County,X,,
+40380,"Rochester, NY",36051,New York,Livingston County,,X,X
+40380,"Rochester, NY",36055,New York,Monroe County,X,X,X
+40380,"Rochester, NY",36069,New York,Ontario County,,X,X
+40380,"Rochester, NY",36073,New York,Orleans County,X,X,X
+40380,"Rochester, NY",36117,New York,Wayne County,X,X,X
+41420,"Salem, OR",41047,Oregon,Marion County,,X,X
+41420,"Salem, OR",41053,Oregon,Polk County,,X,X
+41620,"Salt Lake City, UT",49035,Utah,Salt Lake County,,X,X
+41620,"Salt Lake City, UT",49045,Utah,Tooele County,,X,X
+41780,"Sandusky, OH",39043,Ohio,Erie County,,,X
+45780,"Toledo, OH",39123,Ohio,Ottawa County,,,X
+42660,"Seattle-Tacoma-Bellevue, WA",53033,Washington,King County,,X,X
+42660,"Seattle-Tacoma-Bellevue, WA",53053,Washington,Pierce County,,X,X
+42660,"Seattle-Tacoma-Bellevue, WA",53061,Washington,Snohomish County,,X,X
+43780,"South Bend-Mishawaka, IN-MI",18141,Indiana,St. Joseph County,,X,X
+44060,"Spokane-Spokane Valley, WA",53065,Washington,Stevens County,,X,X
+44140,"Springfield, MA",25013,Massachusetts,Hampden County,X,,X
+44220,"Springfield, OH",39023,Ohio,Clark County,,X,X
+45060,"Syracuse, NY",36053,New York,Madison County,,X,X
+45060,"Syracuse, NY",36067,New York,Onondaga County,X,X,X
+45060,"Syracuse, NY",36075,New York,Oswego County,,X,X
+45780,"Toledo, OH",39051,Ohio,Fulton County,,X,X
+45780,"Toledo, OH",39095,Ohio,Lucas County,,X,X
+45780,"Toledo, OH",39173,Ohio,Wood County,,X,X
+46300,"Twin Falls, ID",16083,Idaho,Twin Falls County,,,X
+46540,"Utica-Rome, NY",36065,New York,Oneida County,X,X,X
+49340,"Worcester, MA-CT",09140,Connecticut,Windham County,,,X
+48060,"Watertown-Fort Drum, NY",36045,New York,Jefferson County,X,X,X
+48300,"Wenatchee, WA",53007,Washington,Chelan County,,X,X
+49340,"Worcester, MA-CT",25027,Massachusetts,Worcester County,X,,
+49420,"Yakima, WA",53077,Washington,Yakima County,,X,X
+49660,"Youngstown-Warren-Boardman, OH-PA",39099,Ohio,Mahoning County,,X,X
+49660,"Youngstown-Warren-Boardman, OH-PA",39155,Ohio,Trumbull County,,X,X
