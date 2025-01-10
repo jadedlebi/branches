@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NCRC - Counseling for Generational Wealth 2025 Program</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            opacity: 0.9;
+        }
+
+        .search-container {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-direction: row;
+        }
+
+        @media (max-width: 600px) {
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .search-wrapper {
+                width: 100%;
+            }
+            
+            #searchButton {
+                width: 100%;
+                padding: 12px;
+            }
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex: 1;
+        }
+
+        #search {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        #search:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        #searchButton {
+            padding: 12px 24px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        #searchButton:hover {
+            background: #1e3c72;
+        }
+
+        .search-hint {
+            color: #666;
+            font-size: 0.9em;
+            margin-left: 12px;
+            display: block;
+        }
+
+        #result {
+            padding: 15px;
+            border-radius: 6px;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            line-height: 1.5;
+        }
+
+        #map {
+            height: clamp(300px, 60vh, 600px);
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            border-radius: 0 0 6px 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: white;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .autocomplete-items div:hover {
+            background-color: #e9e9e9;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+        }
+
+        .logo {
+            max-width: min(200px, 50vw);
+            height: auto;
+        }
+
+        /* Leaflet popup mobile optimization */
+        .leaflet-popup-content {
+            margin: 13px;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            line-height: 1.5;
+            max-width: 280px;
+        }
+
+        @media (max-width: 480px) {
+            .leaflet-popup-content {
+                max-width: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Counseling for Generational Wealth 2025</h1>
+            <p>Search your address to see if you are geographically eligible for the program.</p>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <div class="search-wrapper">
+                    <input type="text" id="search" placeholder="Enter an address...">
+                    <div id="autocomplete-list" class="autocomplete-items"></div>
+                </div>
+                <button id="searchButton">Search</button>
+            </div>
+            <small class="search-hint">US addresses only</small>
+            <div id="result"></div>
+        </div>
+
+        <div id="map"></div>
+        <div class="logo-container">
+            <img src="ncrc.png" alt="Logo" class="logo">
+        </div>
+    </div>
+
+    <script>
+        let countyData = [];
+        let branchData = [];
+        let markers = [];
+
+        var map = L.map('map').setView([39.8283, -98.5795], 4);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        async function loadCountyData() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/jadedlebi/branches/refs/heads/main/BranchPresence.csv');
+                const csvText = await response.text();
+                const results = Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true
+                });
+                countyData = results.data;
+            } catch (error) {
+                document.getElementById('result').innerHTML = 'Error loading county data. Please try again.';
+                document.getElementById('result').style.color = 'red';
+            }
+        }
+
+        fetch('https://raw.githubusercontent.com/jadedlebi/branches/refs/heads/main/sod1624.csv')
+            .then(response => response.text())
+            .then(data => {
+                branchData = Papa.parse(data, { header: true }).data;
+            });
+
+        function clearMarkers() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+        }
+
+        async function searchAddress() {
+            clearMarkers();
+            
+            const address = document.getElementById('search').value;
+            const resultDiv = document.getElementById('result');
+
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&countrycodes=us`);
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+
+                    const marker = L.marker([lat, lon]);
+                    marker.addTo(map);
+                    markers.push(marker);
+                    map.setView([lat, lon], 13);
+
+                    const reverseGeocodeResponse = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                    const locationData = await reverseGeocodeResponse.json();
+                    
+                    let county = locationData.address.county;
+                    if (!county) {
+                        if (locationData.address.state === 'District of Columbia' || 
+                            locationData.address.state === 'Washington, D.C.' || 
+                            locationData.address.state === 'DC') {
+                            county = 'District of Columbia';
+                        } else {
+                            resultDiv.textContent = 'Could not determine county for this address. Please try again.';
+                            resultDiv.style.color = 'red';
+                            return;
+                        }
+                    }
+                    
+                    county = county.replace(/ County$/i, '')
+                                 .replace(/^County /i, '')
+                                 .toUpperCase()
+                                 .trim();
+                    
+                    const matchingCounty = countyData.find(row => {
+                        const csvCounty = row.county.replace(/ County$/i, '')
+                                                  .replace(/^County /i, '')
+                                                  .toUpperCase()
+                                                  .trim();
+                        const csvState = row.state.toUpperCase().trim();
+                        const searchState = locationData.address.state.toUpperCase().trim();
+                        
+                        return csvCounty === county && csvState === searchState;
+                    });
+
+                    if (matchingCounty) {
+                        const has_KEY_now = matchingCounty.kb24 === 'X';
+                        
+                        if (has_KEY_now) {
+                            resultDiv.style.color = '#2a5298';
+                            resultDiv.textContent = 'You are geographically eligible for the program.';
+                        } else {
+                            resultDiv.style.color = '#666';
+                            resultDiv.textContent = 'Unfortunately, you are not geographically eligible for the program.';
+                        }
+                    } else {
+                        resultDiv.style.color = '#666';
+                        resultDiv.textContent = 'Unfortunately, you are not geographically eligible for the program.';
+                    }
+                } else {
+                    resultDiv.textContent = 'Address not found. Please try again.';
+                    resultDiv.style.color = 'red';
+                }
+            } catch (error) {
+                resultDiv.textContent = 'An error occurred while searching. Please try again.';
+                resultDiv.style.color = 'red';
+            }
+        }
+
+        let timeoutId;
+        const autocompleteList = document.getElementById('autocomplete-list');
+        const searchInput = document.getElementById('search');
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(timeoutId);
+            
+            // Clear previous results
+            autocompleteList.innerHTML = '';
+            
+            const query = this.value.trim();
+            if (query.length < 3) return; // Only search if 3 or more characters
+            
+            // Wait 300ms after user stops typing before making API request
+            timeoutId = setTimeout(async () => {
+                try {
+                    const response = await fetch(
+                        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=us&limit=5`
+                    );
+                    const results = await response.json();
+                    
+                    autocompleteList.innerHTML = '';
+                    results.forEach(result => {
+                        const div = document.createElement('div');
+                        div.textContent = result.display_name;
+                        div.addEventListener('click', () => {
+                            searchInput.value = result.display_name;
+                            autocompleteList.innerHTML = '';
+                            searchAddress();
+                        });
+                        autocompleteList.appendChild(div);
+                    });
+                } catch (error) {
+                    console.error('Error fetching suggestions:', error);
+                }
+            }, 300);
+        });
+
+        // Close autocomplete list when clicking outside
+        document.addEventListener('click', function(e) {
+            if (e.target !== searchInput) {
+                autocompleteList.innerHTML = '';
+            }
+        });
+
+        // Handle keyboard navigation
+        searchInput.addEventListener('keydown', function(e) {
+            const items = autocompleteList.getElementsByTagName('div');
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                let active = autocompleteList.querySelector('.active');
+                if (!active) {
+                    if (e.key === 'ArrowDown' && items.length > 0) {
+                        items[0].classList.add('active');
+                    }
+                } else {
+                    active.classList.remove('active');
+                    if (e.key === 'ArrowDown') {
+                        let next = active.nextElementSibling;
+                        if (next) next.classList.add('active');
+                        else if (items.length > 0) items[0].classList.add('active');
+                    } else {
+                        let prev = active.previousElementSibling;
+                        if (prev) prev.classList.add('active');
+                        else if (items.length > 0) items[items.length - 1].classList.add('active');
+                    }
+                }
+            } else if (e.key === 'Enter') {
+                const active = autocompleteList.querySelector('.active');
+                if (active) {
+                    searchInput.value = active.textContent;
+                    autocompleteList.innerHTML = '';
+                    searchAddress();
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', loadCountyData);
+        document.getElementById('searchButton').addEventListener('click', searchAddress);
+        document.getElementById('search').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchAddress();
+            }
+        });
+    </script>
+</body>
+</html>
