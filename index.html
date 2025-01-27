@@ -273,6 +273,15 @@
                             locationData.address.state === 'Washington, D.C.' || 
                             locationData.address.state === 'DC') {
                             county = 'District of Columbia';
+                        } else if (locationData.address.state === 'Virginia' || 
+                                 locationData.address.state === 'Maryland') {
+                            if (locationData.address.city) {
+                                county = locationData.address.city + ' City';
+                            } else {
+                                resultDiv.textContent = 'Could not determine county for this address. Please try again.';
+                                resultDiv.style.color = 'red';
+                                return;
+                            }
                         } else {
                             resultDiv.textContent = 'Could not determine county for this address. Please try again.';
                             resultDiv.style.color = 'red';
