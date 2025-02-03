@@ -213,6 +213,7 @@
         let countyData = [];
         let branchData = [];
         let markers = [];
+        let ctZipData = [];
 
         var map = L.map('map').setView([39.8283, -98.5795], 4);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -221,15 +222,21 @@
 
         async function loadCountyData() {
             try {
-                const response = await fetch('https://raw.githubusercontent.com/jadedlebi/branches/refs/heads/main/BranchPresence.csv');
-                const csvText = await response.text();
-                const results = Papa.parse(csvText, {
+                const countyResponse = await fetch('https://raw.githubusercontent.com/jadedlebi/branches/refs/heads/main/BranchPresence.csv');
+                const countyText = await countyResponse.text();
+                countyData = Papa.parse(countyText, {
                     header: true,
                     skipEmptyLines: true
-                });
-                countyData = results.data;
+                }).data;
+
+                const ctResponse = await fetch('https://raw.githubusercontent.com/jadedlebi/branches/refs/heads/main/CT_ZIP_to_PlanReg.csv');
+                const ctText = await ctResponse.text();
+                ctZipData = Papa.parse(ctText, {
+                    header: true,
+                    skipEmptyLines: true
+                }).data;
             } catch (error) {
-                document.getElementById('result').innerHTML = 'Error loading county data. Please try again.';
+                document.getElementById('result').innerHTML = 'Error loading data. Please try again.';
                 document.getElementById('result').style.color = 'red';
             }
         }
@@ -268,6 +275,8 @@
                     const locationData = await reverseGeocodeResponse.json();
                     
                     let county = locationData.address.county;
+
+                    // First check for DC/VA/MD special cases
                     if (!county) {
                         if (locationData.address.state === 'District of Columbia' || 
                             locationData.address.state === 'Washington, D.C.' || 
@@ -277,35 +286,78 @@
                                  locationData.address.state === 'Maryland') {
                             if (locationData.address.city) {
                                 county = locationData.address.city + ' City';
-                            } else {
-                                resultDiv.textContent = 'Could not determine county for this address. Please try again.';
-                                resultDiv.style.color = 'red';
+                            }
+                        }
+                    }
+
+                    // Then handle Connecticut separately
+                    if (locationData.address.state === 'Connecticut' || locationData.address.state === 'CT') {
+                        const fccUrl = `https://geo.fcc.gov/api/census/block/find?latitude=${lat}&longitude=${lon}&showall=true&format=json`;
+                        
+                        try {
+                            const fccResponse = await fetch(fccUrl);
+                            const fccData = await fccResponse.json();
+                            
+                            if (fccData.County.FIPS) {
+                                const countyFips = fccData.County.FIPS;
+                                const matchingCounty = countyData.find(row => row.geoid5 === countyFips);
+                                
+                                if (matchingCounty) {
+                                    const is_eligible = matchingCounty.fn16 === 'X' || 
+                                                      matchingCounty.kb16 === 'X' || 
+                                                      matchingCounty.kb24 === 'X';
+                                    
+                                    if (is_eligible) {
+                                        resultDiv.style.color = '#2a5298';
+                                        resultDiv.textContent = 'You are geographically eligible for the program.';
+                                    } else {
+                                        resultDiv.style.color = '#666';
+                                        resultDiv.textContent = 'Unfortunately, you are not geographically eligible for the program.';
+                                    }
+                                } else {
+                                    resultDiv.style.color = '#666';
+                                    resultDiv.textContent = 'Unfortunately, you are not geographically eligible for the program.';
+                                }
                                 return;
                             }
-                        } else {
-                            resultDiv.textContent = 'Could not determine county for this address. Please try again.';
+                        } catch (error) {
+                            resultDiv.textContent = 'Error determining eligibility. Please try again.';
                             resultDiv.style.color = 'red';
                             return;
                         }
                     }
                     
-                    county = county.replace(/ County$/i, '')
-                                 .replace(/^County /i, '')
-                                 .toUpperCase()
-                                 .trim();
+                    if (!county) {
+                        resultDiv.textContent = 'Could not determine region for this address. Please try again.';
+                        resultDiv.style.color = 'red';
+                        return;
+                    }
                     
-                    const matchingCounty = countyData.find(row => {
-                        const csvCounty = row.county.replace(/ County$/i, '')
-                                                  .replace(/^County /i, '')
-                                                  .toUpperCase()
-                                                  .trim();
-                        const csvState = row.state.toUpperCase().trim();
-                        const searchState = locationData.address.state.toUpperCase().trim();
+                    county = county.toUpperCase().trim();
+                    const searchState = locationData.address.state.toUpperCase().trim();
+                    console.log('Searching for county/region:', county);
+                    console.log('State:', searchState);
+                    
+                    // Filter counties by state first
+                    const stateCounties = countyData.filter(row => 
+                        row.state.toUpperCase().trim() === searchState
+                    );
+                    
+                    console.log('Found counties for state:', stateCounties);
+                    
+                    const matchingCounty = stateCounties.find(row => {
+                        const csvCounty = row.county.toUpperCase().trim();
+                        console.log('Comparing:', {
+                            csvCounty,
+                            county,
+                            match: csvCounty === county
+                        });
                         
-                        return csvCounty === county && csvState === searchState;
+                        return csvCounty === county;
                     });
 
                     if (matchingCounty) {
+                        console.log('Found matching county:', matchingCounty);
                         const has_KEY_now = matchingCounty.kb24 === 'X';
                         
                         if (has_KEY_now) {
@@ -316,6 +368,7 @@
                             resultDiv.textContent = 'Unfortunately, you are not geographically eligible for the program.';
                         }
                     } else {
+                        console.log('No matching county found');
                         resultDiv.style.color = '#666';
                         resultDiv.textContent = 'Unfortunately, you are not geographically eligible for the program.';
                     }
