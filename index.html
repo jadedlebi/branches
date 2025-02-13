@@ -273,7 +273,7 @@
                         `q=${encodeURIComponent(query)}&` +
                         `countrycodes=us&` +
                         `limit=5&` +
-                        `featuretype=building,house,residential`
+                        `featuretype=building,house,residential,city,town,village`
                     );
                     const results = await response.json();
                     
@@ -281,25 +281,44 @@
                     results.forEach(result => {
                         const div = document.createElement('div');
                         const addr = result.address;
-                        let formattedAddress = '';
+                        let addressParts = [];
                         
+                        // Add street address if available
                         if (addr.house_number && addr.road) {
-                            formattedAddress += `${addr.house_number} ${addr.road}`;
+                            addressParts.push(`${addr.house_number} ${addr.road}`);
                         } else if (addr.road) {
-                            formattedAddress += addr.road;
+                            addressParts.push(addr.road);
                         }
                         
-                        if (addr.city) {
-                            formattedAddress += `, ${addr.city}`;
+                        // Clean and add municipality name
+                        const cleanMunicipalityName = (name) => {
+                            if (!name) return '';
+                            return name
+                                .replace(/^(Town of|City of|Village of|Township of)\s+/i, '')
+                                .replace(/\s+(town|city|village|township)$/i, '');
+                        };
+                        
+                        // Always add municipality (city/town/village) if available
+                        if (addr.village) {
+                            addressParts.push(cleanMunicipalityName(addr.village));
+                        } else if (addr.town) {
+                            addressParts.push(cleanMunicipalityName(addr.town));
+                        } else if (addr.city) {
+                            addressParts.push(cleanMunicipalityName(addr.city));
                         }
                         
+                        // Add state
                         if (addr.state) {
-                            formattedAddress += `, ${addr.state}`;
+                            addressParts.push(cleanMunicipalityName(addr.state));
                         }
                         
+                        // Add postal code
                         if (addr.postcode) {
-                            formattedAddress += ` ${addr.postcode}`;
+                            addressParts.push(addr.postcode);
                         }
+                        
+                        // Join all non-empty parts with commas
+                        const formattedAddress = addressParts.filter(Boolean).join(', ');
                         
                         div.textContent = formattedAddress;
                         div.addEventListener('click', () => {
