@@ -287,6 +287,21 @@
                             if (locationData.address.city) {
                                 county = locationData.address.city + ' City';
                             }
+                        } else if (locationData.address.city === 'San Francisco') {
+                            // Handle San Francisco special case
+                            county = 'San Francisco';
+                        } else if (locationData.address.city) {
+                            // Try to find county by city name in the data
+                            const searchState = locationData.address.state.toUpperCase().trim();
+                            const stateCounties = countyData.filter(row => 
+                                row.state.toUpperCase().trim() === searchState
+                            );
+                            const cityCounty = stateCounties.find(row => 
+                                row.county.toUpperCase().includes(locationData.address.city.toUpperCase())
+                            );
+                            if (cityCounty) {
+                                county = cityCounty.county;
+                            }
                         }
                     }
 
