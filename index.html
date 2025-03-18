@@ -512,9 +512,19 @@
 
                 if (matchingCounty) {
                     console.log('Found matching county:', matchingCounty);
-                    const has_KEY_now = matchingCounty.kb24 === 'X';
+                    // Check all entries for this county
+                    const allCountyEntries = stateCounties.filter(row => 
+                        row.county.toUpperCase().trim() === county
+                    );
                     
-                    if (has_KEY_now) {
+                    // Check if ANY entry has any of the eligibility fields marked with 'X'
+                    const is_eligible = allCountyEntries.some(entry => 
+                        entry.fn16 === 'X' || 
+                        entry.kb16 === 'X' || 
+                        entry.kb24 === 'X'
+                    );
+                    
+                    if (is_eligible) {
                         resultDiv.style.color = '#2a5298';
                         resultDiv.textContent = 'You are geographically eligible for the program.';
                     } else {
