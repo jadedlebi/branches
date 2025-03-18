@@ -413,22 +413,33 @@
                 const reverseGeocodeResponse = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
                 const locationData = await reverseGeocodeResponse.json();
                 
+                // Add debug logging
+                console.log('Raw location data:', locationData.address);
+
                 let county = locationData.address.county;
+                console.log('Initial county value:', county);
 
                 // First check for DC/VA/MD special cases
                 if (!county) {
+                    console.log('No direct county match, checking special cases...');
                     if (locationData.address.state === 'District of Columbia' || 
                         locationData.address.state === 'Washington, D.C.' || 
                         locationData.address.state === 'DC') {
                         county = 'District of Columbia';
+                        console.log('DC special case matched');
                     } else if (locationData.address.state === 'Virginia' || 
-                             locationData.address.state === 'Maryland') {
+                               locationData.address.state === 'Maryland') {
                         if (locationData.address.city) {
                             county = locationData.address.city + ' City';
+                            console.log('VA/MD city special case matched:', county);
                         }
                     } else if (locationData.address.city === 'San Francisco') {
-                        // Handle San Francisco special case
                         county = 'San Francisco';
+                        console.log('SF special case matched');
+                    } else if (locationData.address.city === 'St. Louis' || 
+                               locationData.address.city === 'Saint Louis') {
+                        county = 'St. Louis City';
+                        console.log('St. Louis special case matched');
                     } else if (locationData.address.city) {
                         // Try to find county by city name in the data
                         const searchState = locationData.address.state.toUpperCase().trim();
@@ -440,9 +451,12 @@
                         );
                         if (cityCounty) {
                             county = cityCounty.county;
+                            console.log('Found county by city name:', county);
                         }
                     }
                 }
+
+                console.log('Final county value:', county);
 
                 // Then handle Connecticut separately
                 if (locationData.address.state === 'Connecticut' || locationData.address.state === 'CT') {
